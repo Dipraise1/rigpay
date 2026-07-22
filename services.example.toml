@@ -1,0 +1,47 @@
+# rigpay service catalog — copy to services.toml and edit.
+# services.toml is gitignored; this example file is the documentation.
+
+[operator]
+# Where USDC lands. rigpay NEVER holds the private key for this address.
+receive_address = "YOUR_SOLANA_ADDRESS"
+usdc_mint       = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+# Any Solana RPC. Bring your own key — read-only calls only.
+rpc_url         = "https://api.mainnet-beta.solana.com"
+# Payment must confirm within this window or the quote expires.
+quote_ttl_secs  = 300
+
+[reporting]
+# Daily reconciliation is delivered by the ZeroClaw agent (see agent/sops/).
+timezone   = "America/Sao_Paulo"
+daily_hour = 21
+
+# ── Services ──────────────────────────────────────────────────────────
+# Each service = one [[service]] block + one adapter.
+# unit: per_request | per_gb_month | per_minute | per_mb
+
+[[service]]
+id      = "gpu-inference"
+summary = "Image/LLM inference on RTX rig"
+price   = 0.25
+unit    = "per_request"
+adapter = "command"
+command = "./adapters/gpu_infer.sh {input} {output}"
+timeout_secs = 120
+
+[[service]]
+id      = "cold-storage"
+summary = "Encrypted private storage, 30-day retention"
+price   = 1.50
+unit    = "per_gb_month"
+adapter = "command"
+command = "./adapters/store_blob.sh {input}"
+timeout_secs = 60
+
+[[service]]
+id      = "transcode"
+summary = "Video transcode (h264 -> av1)"
+price   = 0.05
+unit    = "per_minute"
+adapter = "command"
+command = "./adapters/transcode.sh {input} {output}"
+enabled = false

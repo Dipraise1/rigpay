@@ -1,51 +1,103 @@
 # rigpay
 
-**A self-hosted ZeroClaw agent that sells your idle GPU compute behind an x402 paywall on Solana — and reports the money to your phone.**
+**Turn any machine you own into a paid service.**
 
-Built for the [ZeroClaw × Solana bounty](https://github.com/zeroclaw-labs/zeroclaw) (Superteam Brasil).
+rigpay is a self-hosted toolkit that puts a [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) agent in front of hardware you already run — and lets it sell that hardware's services for USDC on Solana, behind an x402 paywall.
 
-## The job
+- A **GPU rig** sells inference and render jobs
+- A **NAS or homelab box** sells private encrypted storage
+- A **fat internet connection** sells bandwidth / proxy access
+- A **Raspberry Pi** sells sensor data feeds
+- Anything with a CPU sells transcoding, backups, CI minutes…
 
-You own GPUs. They sit idle. `rigpay` puts a ZeroClaw agent in front of them:
+You describe your services in one config file. The agent does the rest: quotes prices, answers requests with **HTTP 402 Payment Required**, verifies payment on-chain, dispatches the job to your machine, and reports revenue to your phone every day.
 
-1. A client (human or another agent) hits your inference/render endpoint.
-2. They get an HTTP **402 Payment Required** with a USDC price on Solana.
-3. They pay. The agent verifies settlement on-chain, dispatches the job to the rig, returns the result.
-4. Every day, a cron SOP posts a revenue reconciliation to the operator's Telegram: jobs run, USDC earned, anomalies flagged.
+**The agent earns — it never spends.** That's the custody story, and it's non-negotiable.
 
-The agent **earns** — it never spends. That's the custody story.
+Built for the ZeroClaw × Solana bounty (Superteam Brasil).
+
+## How it works
+
+```
+client / another agent
+        │  HTTP request
+        ▼
+┌───────────────────┐   402 + price + payment reference
+│   rigpay gateway   │◀──────────────────────────────────┐
+│  (one small binary)│                                    │
+└─────────┬─────────┘   client pays USDC (Solana Pay)     │
+          │             gateway sees it on-chain ─────────┘
+          │  verified → dispatch
+          ▼
+   your service adapter (GPU / storage / bandwidth / …)
+          │
+          ▼
+   ZeroClaw agent: daily revenue SOP → Telegram/WhatsApp
+```
+
+1. Client hits your endpoint → gets `402` with a USDC price and a fresh Solana Pay reference key.
+2. Client pays. Verification is **read-only RPC** (`getSignaturesForAddress` on the reference key).
+3. Gateway runs the service adapter, returns the result.
+4. A ZeroClaw cron SOP reconciles daily: jobs run, USDC earned, anomalies flagged, delivered to the operator's chat.
+
+## Define your services
+
+One file: [`services.example.toml`](services.example.toml)
+
+```toml
+[operator]
+receive_address = "YOUR_SOLANA_ADDRESS"   # where USDC lands. rigpay never holds this key.
+usdc_mint      = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+
+[[service]]
+id      = "gpu-inference"
+summary = "Stable Diffusion / LLM inference on RTX rig"
+price   = 0.25          # USDC
+unit    = "per_request"
+adapter = "command"
+command = "./adapters/gpu_infer.sh {input} {output}"
+
+[[service]]
+id      = "cold-storage"
+summary = "Encrypted private storage, 30-day retention"
+price   = 1.50
+unit    = "per_gb_month"
+adapter = "command"
+command = "./adapters/store_blob.sh {input}"
+```
+
+Add a service = add a `[[service]]` block + an adapter script. See [`docs/adapters.md`](docs/adapters.md).
 
 ## Custody tier: T1 (receive-only)
 
-- **No private keys held by the agent.** Payments arrive at a plain receiving address; verification is read-only RPC (`getSignaturesForAddress` on per-invoice reference keys).
-- Refunds (if ever) are *proposed* by the agent and require a human approval checkpoint via ZeroClaw's SOP engine. The agent cannot sign.
-- Threat model + prompt-injection transcript: see [`docs/threat-model.md`](docs/threat-model.md).
+- The agent and gateway hold **no private keys**. Payments arrive at your address; verification is read-only.
+- Refunds are *proposed* by the agent and blocked on a human approval checkpoint (ZeroClaw SOP). The agent cannot sign — ever.
+- Threat model + prompt-injection transcript: [`docs/threat-model.md`](docs/threat-model.md).
 
 ## ZeroClaw features used
 
-- **Webhook channel** — inbound job requests / 402 handshake surface
-- **Telegram channel** — operator reports & approvals
-- **Skills** — Solana Pay reference-key construction, 402 response shaping, price menu
-- **SOP engine** — cron reconciliation, payment-poll watch loop, approval checkpoint on refunds
-- **Memory** — client history, pricing tiers, rig availability
+- **Webhook channel** — job requests / 402 handshake surface
+- **Telegram channel** — operator reports & refund approvals
+- **Skills** — Solana Pay reference construction, price-menu shaping, client Q&A
+- **SOP engine** — cron reconciliation, payment watch-loop, refund approval checkpoint
+- **Memory** — client history, per-client pricing, rig availability
 
-## Architecture
+## Repo layout
 
 ```
-client/agent ──HTTP──▶ [402 gateway] ──▶ ZeroClaw agent
-                                             │
-                       Solana RPC ◀──reads───┤  (T1: read-only)
-                       GPU rig    ◀──job─────┤
-                       Telegram   ◀──reports─┘
+gateway/     the 402 gateway (Rust)
+adapters/    service adapter scripts (GPU, storage examples included)
+agent/       ZeroClaw config, skills, SOPs — secrets redacted
+docs/        setup guide, adapter guide, threat model, build log
 ```
 
 ## Status
 
-🚧 Bounty build in progress — follow along in `docs/buildlog.md`.
+🚧 Bounty build in progress — reference deployment: GPU inference + cold storage on the operator's own rigs. Follow `docs/buildlog.md`.
 
 ## Reproduce it
 
-Goal: another operator sets this up in an evening. Full config (secrets redacted), SOPs, and skills will live in [`agent/`](agent/) with a step-by-step in [`docs/setup.md`](docs/setup.md).
+Target: **you set this up in an evening.** Stock ZeroClaw release binary, one gateway binary, your `services.toml`, your adapters. Step-by-step in [`docs/setup.md`](docs/setup.md).
 
 ## License
 
