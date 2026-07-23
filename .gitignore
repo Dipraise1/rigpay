@@ -7,3 +7,5 @@ target/
 node_modules/
 .DS_Store
 services.toml
+gateway/target/
+data/
