@@ -5,7 +5,7 @@ version = "1.0.0"
 max_concurrent = 1
 admission_policy = "hold"
 max_pending_approvals = 4
-agent = "rigpay"
+agent = "rende"
 
 [[triggers]]
 type = "cron"

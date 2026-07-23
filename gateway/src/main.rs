@@ -1,4 +1,4 @@
-use rigpay_gateway::{config, server};
+use rende_gateway::{config, server};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -16,7 +16,7 @@ async fn main() -> anyhow::Result<()> {
     let (router, app) = server::build(cfg)?;
     tokio::spawn(server::evict_expired(app));
 
-    tracing::info!(%bind, "rigpay-gateway listening");
+    tracing::info!(%bind, "rende-gateway listening");
     let listener = tokio::net::TcpListener::bind(&bind).await?;
     axum::serve(listener, router)
         .with_graceful_shutdown(async {

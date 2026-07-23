@@ -12,7 +12,7 @@ pub struct Config {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Operator {
-    /// Plain public address where USDC lands. rigpay never sees its key.
+    /// Plain public address where USDC lands. rende never sees its key.
     pub receive_address: String,
     pub usdc_mint: String,
     pub rpc_url: String,

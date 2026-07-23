@@ -13,7 +13,7 @@ const RPC_ATTEMPTS: usize = 2;
 /// maliciously spammed reference can't make us fetch unbounded transactions.
 const SIG_SCAN_LIMIT: usize = 20;
 
-/// Read-only Solana RPC client. This is the entire on-chain surface of rigpay:
+/// Read-only Solana RPC client. This is the entire on-chain surface of rende:
 /// two methods, zero keys, zero signing.
 pub struct Rpc {
     client: reqwest::Client,
@@ -192,9 +192,9 @@ mod tests {
 
     #[test]
     fn pay_url_shape() {
-        let url = pay_url("Recip111", 0.25, MINT, "Ref111", "rigpay: gpu job");
+        let url = pay_url("Recip111", 0.25, MINT, "Ref111", "rende: gpu job");
         assert!(url.starts_with("solana:Recip111?amount=0.25&spl-token="));
         assert!(url.contains("reference=Ref111"));
-        assert!(url.contains("label=rigpay%3A%20gpu%20job"));
+        assert!(url.contains("label=rende%3A%20gpu%20job"));
     }
 }

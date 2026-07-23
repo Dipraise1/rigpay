@@ -144,7 +144,7 @@ fn issue_quote(app: &App, service: &config::Service) -> Response {
             service.price,
             &app.cfg.operator.usdc_mint,
             &reference,
-            &format!("rigpay: {}", service.id),
+            &format!("rende: {}", service.id),
         ),
         expires_at: now() + app.cfg.operator.quote_ttl_secs,
     };

@@ -1,11 +1,11 @@
-# rigpay ZeroClaw agent — merge into ~/.zeroclaw/config.toml
+# rende ZeroClaw agent — merge into ~/.zeroclaw/config.toml
 #
 # Verified against ZeroClaw master (schema_version 3). Secrets are placeholders;
 # prefer env overrides (ZEROCLAW_channels__telegram__default__bot_token=...) or
 # the encrypted secrets store over inline values.
 #
 # Least-privilege posture, stated once here and enforced below:
-#   - the agent can reach ONLY the local rigpay gateway over HTTP
+#   - the agent can reach ONLY the local rende gateway over HTTP
 #   - web_fetch is disabled outright
 #   - the agent holds no keys and no RPC access — the gateway owns the chain
 
@@ -54,9 +54,9 @@ mention_only = false
 approval_timeout_secs = 3600       # refund approvals can wait for a human
 
 # ── Skills ────────────────────────────────────────────────────────────
-[skill_bundles.rigpay]
-# defaults to <install>/shared/skills/rigpay — copy this repo's
-# agent/shared/skills/rigpay there.
+[skill_bundles.rende]
+# defaults to <install>/shared/skills/rende — copy this repo's
+# agent/shared/skills/rende there.
 
 # ── SOPs ──────────────────────────────────────────────────────────────
 [sop]
@@ -66,8 +66,8 @@ approval_timeout_secs = 3600
 maintenance_interval_secs = 60
 
 # ── The agent ─────────────────────────────────────────────────────────
-[agents.rigpay]
+[agents.rende]
 channels = ["telegram.default"]
 model_provider = "anthropic.default"
 risk_profile = "operator"
-skill_bundles = ["rigpay"]
+skill_bundles = ["rende"]

@@ -1,4 +1,4 @@
-# rigpay engineering standards
+# rende engineering standards
 
 This is production infrastructure that sells services for money, not a demo.
 Every change is held to these rules.

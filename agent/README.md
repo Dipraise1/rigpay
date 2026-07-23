@@ -1,6 +1,6 @@
-# rigpay ZeroClaw agent
+# rende ZeroClaw agent
 
-The agent half of rigpay: Telegram front-of-house + two SOPs over the
+The agent half of rende: Telegram front-of-house + two SOPs over the
 gateway's API. Authored against ZeroClaw master, schema_version 3.
 
 ## Install (stock release binary, no plugins)
@@ -15,8 +15,8 @@ cp -r agent/shared/skills ~/.zeroclaw/shared/
 cp -r agent/shared/sops   ~/.zeroclaw/shared/
 
 # 3. Agent identity file
-mkdir -p ~/.zeroclaw/agents/rigpay/workspace
-cp agent/workspace/AGENTS.md ~/.zeroclaw/agents/rigpay/workspace/
+mkdir -p ~/.zeroclaw/agents/rende/workspace
+cp agent/workspace/AGENTS.md ~/.zeroclaw/agents/rende/workspace/
 
 # 4. Secrets via env, never in the file
 export ZEROCLAW_providers__models__anthropic__default__api_key="sk-ant-..."
@@ -34,7 +34,7 @@ The gateway must be running on `127.0.0.1:4020` (see `docs/setup.md`).
 | Piece | File | Purpose |
 |---|---|---|
 | Config | `config.example.toml` | agent + Telegram + least-privilege tools |
-| Skill | `shared/skills/rigpay/rigpay-operator/SKILL.md` | reports, quotes, refund proposals |
+| Skill | `shared/skills/rende/rende-operator/SKILL.md` | reports, quotes, refund proposals |
 | SOP | `shared/sops/daily-reconciliation/` | cron 21:00 → post day's earnings |
 | SOP | `shared/sops/refund-review/` | cron 4h → **human checkpoint** → proposals |
 | Identity | `workspace/AGENTS.md` | standing prompt-injection posture |

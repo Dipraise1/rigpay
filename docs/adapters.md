@@ -1,6 +1,6 @@
 # Writing a service adapter
 
-An adapter is how rigpay hands a *paid* job to your machine. The gateway only
+An adapter is how rende hands a *paid* job to your machine. The gateway only
 runs an adapter after payment is verified on-chain.
 
 ## The contract
@@ -37,9 +37,9 @@ Placeholders in the `command` string of your `[[service]]` block:
 set -euo pipefail
 input="$1"
 ticket=$(uuidgen)
-age -r "$STORAGE_RECIPIENT" -o "/srv/rigpay-store/$ticket.age" "$input"
+age -r "$STORAGE_RECIPIENT" -o "/srv/rende-store/$ticket.age" "$input"
 echo "{\"ticket\": \"$ticket\", \"retention_days\": 30}"
 ```
 
 That's the whole integration surface. If your service can be started from a
-shell command, rigpay can sell it.
+shell command, rende can sell it.

@@ -6,7 +6,7 @@
 set -euo pipefail
 
 input="$1"
-STORE_DIR="${STORE_DIR:-$HOME/rigpay-store}"
+STORE_DIR="${STORE_DIR:-$HOME/rende-store}"
 mkdir -p "$STORE_DIR"
 
 ticket=$(uuidgen | tr '[:upper:]' '[:lower:]')

@@ -4,7 +4,7 @@ description = "Fetch the gateway's shaped daily report and post the summary to t
 version = "1.0.0"
 max_concurrent = 1
 admission_policy = "coalesce"
-agent = "rigpay"
+agent = "rende"
 
 [[triggers]]
 type = "cron"

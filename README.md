@@ -1,8 +1,10 @@
-# rigpay
+# rende
 
 **Turn any machine you own into a paid service.**
 
-rigpay is a self-hosted toolkit that puts a [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) agent in front of hardware you already run — and lets it sell that hardware's services for USDC on Solana, behind an x402 paywall.
+*Rende* — Brazilian Portuguese for what money does when it's working: **"o dinheiro rende"** — the money yields.
+
+rende is a self-hosted toolkit that puts a [ZeroClaw](https://github.com/zeroclaw-labs/zeroclaw) agent in front of hardware you already run — and lets it sell that hardware's services for USDC on Solana, behind an x402 paywall.
 
 - A **GPU rig** sells inference and render jobs
 - A **NAS or homelab box** sells private encrypted storage
@@ -23,7 +25,7 @@ client / another agent
         │  HTTP request
         ▼
 ┌───────────────────┐   402 + price + payment reference
-│   rigpay gateway   │◀──────────────────────────────────┐
+│   rende gateway   │◀──────────────────────────────────┐
 │  (one small binary)│                                    │
 └─────────┬─────────┘   client pays USDC (Solana Pay)     │
           │             gateway sees it on-chain ─────────┘
@@ -46,7 +48,7 @@ One file: [`services.example.toml`](services.example.toml)
 
 ```toml
 [operator]
-receive_address = "YOUR_SOLANA_ADDRESS"   # where USDC lands. rigpay never holds this key.
+receive_address = "YOUR_SOLANA_ADDRESS"   # where USDC lands. rende never holds this key.
 usdc_mint      = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 
 [[service]]

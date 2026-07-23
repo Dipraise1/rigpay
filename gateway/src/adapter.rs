@@ -76,7 +76,7 @@ mod tests {
             max_concurrent: 1,
             enabled: true,
         };
-        let dir = std::env::temp_dir().join("rigpay-test");
+        let dir = std::env::temp_dir().join("rende-test");
         let res = run(&svc, "t1", &dir, b"hello").await.unwrap();
         assert_eq!(res, b"hello");
     }
@@ -94,7 +94,7 @@ mod tests {
             max_concurrent: 1,
             enabled: true,
         };
-        let dir = std::env::temp_dir().join("rigpay-test");
+        let dir = std::env::temp_dir().join("rende-test");
         let err = run(&svc, "t2", &dir, b"").await.unwrap_err().to_string();
         assert!(err.contains("nope"), "got: {err}");
     }

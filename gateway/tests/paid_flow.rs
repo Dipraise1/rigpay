@@ -7,7 +7,7 @@
 
 use axum::routing::post;
 use axum::{Json, Router};
-use rigpay_gateway::{config, server};
+use rende_gateway::{config, server};
 use serde_json::{json, Value};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -91,7 +91,7 @@ fn test_config(rpc_url: &str, data_dir: &str) -> config::Config {
 async fn full_x402_flow_unpaid_then_paid() {
     let paid = Arc::new(AtomicBool::new(false));
     let rpc_url = serve(mock_rpc(paid.clone())).await;
-    let data_dir = std::env::temp_dir().join(format!("rigpay-it-{}", std::process::id()));
+    let data_dir = std::env::temp_dir().join(format!("rende-it-{}", std::process::id()));
     let (router, _app) =
         server::build(test_config(&rpc_url, &data_dir.to_string_lossy())).unwrap();
     let base = serve(router).await;
@@ -158,7 +158,7 @@ async fn full_x402_flow_unpaid_then_paid() {
 async fn unknown_service_and_unknown_job_rejected() {
     let paid = Arc::new(AtomicBool::new(false));
     let rpc_url = serve(mock_rpc(paid)).await;
-    let data_dir = std::env::temp_dir().join(format!("rigpay-it2-{}", std::process::id()));
+    let data_dir = std::env::temp_dir().join(format!("rende-it2-{}", std::process::id()));
     let (router, _app) =
         server::build(test_config(&rpc_url, &data_dir.to_string_lossy())).unwrap();
     let base = serve(router).await;

@@ -7,14 +7,14 @@ reporting and refund approvals.
 ## 1. Gateway
 
 ```sh
-git clone https://github.com/Dipraise1/rigpay && cd rigpay
+git clone https://github.com/Dipraise1/rende && cd rende
 cp services.example.toml services.toml
 # edit services.toml:
-#   - operator.receive_address = your Solana address (rigpay never sees its key)
+#   - operator.receive_address = your Solana address (rende never sees its key)
 #   - operator.rpc_url         = your RPC (public mainnet works to start)
 #   - one [[service]] block per thing you sell
 cargo build --release --manifest-path gateway/Cargo.toml
-./gateway/target/release/rigpay-gateway services.toml
+./gateway/target/release/rende-gateway services.toml
 ```
 
 Smoke it:

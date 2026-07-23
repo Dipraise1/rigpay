@@ -1,8 +1,8 @@
-# rigpay service catalog — copy to services.toml and edit.
+# rende service catalog — copy to services.toml and edit.
 # services.toml is gitignored; this example file is the documentation.
 
 [operator]
-# Where USDC lands. rigpay NEVER holds the private key for this address.
+# Where USDC lands. rende NEVER holds the private key for this address.
 receive_address = "YOUR_SOLANA_ADDRESS"
 usdc_mint       = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 # Any Solana RPC. Bring your own key — read-only calls only.

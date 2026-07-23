@@ -1,4 +1,4 @@
-//! rigpay-gateway: an x402 paywall that sells machine services for USDC on
+//! rende-gateway: an x402 paywall that sells machine services for USDC on
 //! Solana, receive-only.
 //!
 //! Custody invariant for the whole crate: nothing here holds, derives, or
