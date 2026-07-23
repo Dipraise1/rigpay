@@ -5,8 +5,18 @@ is the single source of truth for where the project stands.
 
 ## ✅ Built
 
-### Gateway (`gateway/`) — v0.1, working
-- [x] Rust binary (axum + tokio), compiles clean, **9/9 unit tests passing**
+### Gateway (`gateway/`) — v0.2, hardened for capacity
+- [x] Rust binary (axum + tokio), compiles clean, clippy clean, **16/16 tests passing**
+- [x] **Capacity hardening (v0.2)**: bounded quote store (cap + background
+  eviction — quote spam can't grow memory), per-service concurrency budgets
+  (semaphores; saturation → 429, paid jobs keep their quote and retry free),
+  body-size limits, RPC timeouts + transport retry, structured tracing logs,
+  graceful shutdown, config validation at startup (base58 checks, sane bounds)
+- [x] **Paid-path integration test** (`tests/paid_flow.rs`): mock RPC flips
+  unpaid → paid mid-test; covers quote, unpaid rejection, verification,
+  dispatch, replay protection, and report — no real money needed, ever
+- [x] Engineering standards codified in `CLAUDE.md` (bounded everything, no
+  panics in request path, custody invariant, shaped model-facing output)
 - [x] `services.toml` catalog: operator address, RPC, per-service price/unit/command
 - [x] x402 flow at `POST /jobs/{service}`:
   - no `X-Job-Id` → **HTTP 402** + quote (job_id, USDC price, Solana Pay URL, single-use reference key, TTL)

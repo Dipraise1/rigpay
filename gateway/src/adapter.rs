@@ -73,6 +73,7 @@ mod tests {
             adapter: "command".into(),
             command: "cat {input}".into(),
             timeout_secs: 5,
+            max_concurrent: 1,
             enabled: true,
         };
         let dir = std::env::temp_dir().join("rigpay-test");
@@ -90,6 +91,7 @@ mod tests {
             adapter: "command".into(),
             command: "echo nope >&2; exit 3".into(),
             timeout_secs: 5,
+            max_concurrent: 1,
             enabled: true,
         };
         let dir = std::env::temp_dir().join("rigpay-test");
