@@ -12,9 +12,18 @@
 schema_version = 3
 
 # ── Model ─────────────────────────────────────────────────────────────
-[providers.models.anthropic.default]
-api_key = "REPLACE_OR_USE_ENV"
-model = "claude-sonnet-5"
+# Reference deployment: self-hosted Ollama on the operator's GPU rig, reached
+# over Tailscale. The whole stack — model, agent, gateway — runs on hardware
+# the operator owns.
+[providers.models.ollama.rig]
+uri = "http://YOUR_RIG_TAILSCALE_IP:11434"
+model = "qwen2.5:7b-instruct"   # tool-calling capable; agent needs native tools
+timeout_secs = 120
+
+# Hosted alternative if you have no GPU:
+# [providers.models.anthropic.default]
+# api_key = "REPLACE_OR_USE_ENV"
+# model = "claude-sonnet-5"
 
 # ── Risk profile ──────────────────────────────────────────────────────
 # supervised: medium-risk actions require approval in-channel. The agent's
@@ -71,6 +80,6 @@ maintenance_interval_secs = 60
 # ── The agent ─────────────────────────────────────────────────────────
 [agents.rende]
 channels = ["telegram.default"]
-model_provider = "anthropic.default"
+model_provider = "ollama.rig"
 risk_profile = "operator"
 skill_bundles = ["rende"]
