@@ -22,7 +22,11 @@ cp agent/workspace/AGENTS.md ~/.zeroclaw/agents/rende/workspace/
 export ZEROCLAW_providers__models__anthropic__default__api_key="sk-ant-..."
 export ZEROCLAW_channels__telegram__default__bot_token="123:ABC..."
 
-# 5. Validate the SOPs, then run
+# 5. Make sops_dir absolute — it resolves against the daemon's cwd, and cron
+#    triggers must fire no matter where the daemon starts (verified on v0.8.3)
+sed -i '' "s|shared/sops|$HOME/.zeroclaw/shared/sops|" ~/.zeroclaw/config.toml
+
+# 6. Validate the SOPs, then run
 zeroclaw sop validate
 zeroclaw daemon
 ```
